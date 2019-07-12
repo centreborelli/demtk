@@ -1,0 +1,28 @@
+#!/bin/sh
+
+#set -e
+#set -x
+
+FNAME=$1
+
+X=`grep ^%RUN_VERBATIMS $FNAME | cut -c16-`
+
+GETV='/^\\end{verbatim}$/{x=0}x;/^\\begin{verbatim}$/{x=1}'
+
+case $X in
+	sh|octave|python3)
+		cat $FNAME | awk $GETV | $X
+		;;
+	octavescript)
+		T=`mktemp`
+		echo "1;" > $T
+		cat $FNAME | awk $GETV >> $T
+		octave $T
+		rm $T
+		;;
+	"sh &")
+		(cat $FNAME | awk '/^%VSCR/{print substr($0,9)};'$GETV |\
+		sed -e '/^ /b;  /^[A-Z]*=/b;  s/\([^\\;]\)$/\1 \&/'
+		echo wait) | sh
+		;;
+esac

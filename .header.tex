@@ -1,0 +1,42 @@
+\documentclass[a4paper]{article}    % base article class
+\usepackage[utf8]{inputenc}         % allow utf8 input
+\usepackage{graphicx}               % includegraphics
+\usepackage{amsmath,amsthm}         % fancier math
+%
+%\usepackage{newtxtext}               % times new roman font
+%\usepackage[bigdelims,cmintegrals,vvarbb]{newtxmath}
+%
+\usepackage[osf,sups]{Baskervaldx} % lining figures
+\usepackage[bigdelims,cmintegrals,vvarbb,baskervaldx,frenchmath,upint]{newtxmath} % math font
+
+%\usepackage[scale=.8]{inconsolata}                  % monospace font
+
+\usepackage[T1]{fontenc}
+\usepackage{cabin}
+%\usepackage[zerostyle=d]{newtxtt}
+%\renewcommand*\ffamilydefault{\ttdefault}
+
+\usepackage[cal=boondoxo]{mathalfa} % mathcal from STIX, unslanted a bit
+%
+\usepackage{hyperref,url}           % hyperlinks and urls
+%\usepackage{fancyvrb}               % fancier verbatim environment
+\setlength{\parindent}{0pt}         % no paragraph indentation
+\setlength{\parskip}{7pt}           % spacing between paragraphs
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\pdfimageresolution 200             % change the default for included png files
+\pdfinfoomitdate=1\pdftrailerid{}   % ensure reproducible PDF
+\makeatletter\renewcommand{\verbatim@font}{\ttfamily\footnotesize}\makeatother
+\newenvironment{gallery}{}{}
+\newcommand{\galleryline}[1]{\includegraphics{#1}{\footnotesize\tt #1}\newline}
+\theoremstyle{note}
+\newtheorem{exercice}{Exercice}
+\swapnumbers
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\setcounter{section}{-1}
+
+\begin{document}

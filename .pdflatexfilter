@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# just a filter to compile latex without polluting
+# usage:
+#	cat article.tex | pdflatexfilter > article.pdf
+
+set -e
+#set -x
+
+T=`mktemp -d /tmp/pdflatexfilter.XXXXXX`
+
+cat /dev/stdin > $T/a.tex
+
+# optionally, add a \maketitle if \title appears inside the document
+if true; then
+	sed '/^\\title{/s/$/\\date{}\\maketitle/' -i $T/a.tex
+fi
+
+# optionally, remove "i/" and "o/" from the beginning of strings
+if true; then
+	sed 's/\"i\//\"/g' -i $T/a.tex
+	sed 's/\"o\//\"/g' -i $T/a.tex
+fi
+
+#pdflatex -interaction nonstopmode -output-directory $T $T/a
+latexmk -pdf -interaction=nonstopmode -output-directory=$T $T/a \
+	>$T/oo 2>$T/oe || cat $T/oo >&2
+
+cat $T/a.pdf
+
+#rm -rf $T
