@@ -16,10 +16,10 @@ pixel intensities:
 
 \begin{quote}
 \begin{verbatim}
-import piio
-x = piio.read("i/terrassa.tif")
+import iio
+x = iio.read("i/terrassa.tif")
 X = (255.0 * (x - x.min())/(x.max() - x.min())).clip(0,255)
-piio.write("o/terrassa.png", X)
+iio.write("o/terrassa.png", X)
 \end{verbatim}
 \includegraphics{o/terrassa.png}~\verb+terrassa.png+
 \end{quote}
@@ -65,10 +65,10 @@ the SRTM4, which has a resolution of 90m per pixel.
 
 \begin{quote}
 \begin{verbatim}
-import piio
-x = piio.read("i/fuji.tif")
+import iio
+x = iio.read("i/fuji.tif")
 X = qauto(x)
-piio.write("o/fuji.png", X)
+iio.write("o/fuji.png", X)
 \end{verbatim}
 \includegraphics{o/fuji.png}~\verb+fuji.png+
 \end{quote}
@@ -136,12 +136,12 @@ def render_shading(a, s=(1,1)):  # directional derivative of a along s
 And now we display the Fuji DEM using this function
 
 
-%import piio
+%import iio
 \begin{quote}
 \begin{verbatim}
-x = piio.read("i/fuji.tif").squeeze()
+x = iio.read("i/fuji.tif").squeeze()
 X = render_shading(x)
-piio.write("o/fuji_shading.png", qauto(X) )
+iio.write("o/fuji_shading.png", qauto(X) )
 \end{verbatim}
 \includegraphics{o/fuji_shading.png}~\verb+fuji_shading.png+
 \end{quote}
@@ -190,9 +190,9 @@ def filter_riesz(x, s):   # Riesz scale-space (symmetric boundary conditions)
 
 \begin{quote}
 \begin{verbatim}
-x = piio.read("i/fuji.tif").squeeze()
+x = iio.read("i/fuji.tif").squeeze()
 X = filter_riesz(render_shading(x), -0.5)
-piio.write("o/fuji_smooth.png", qauto(X) )
+iio.write("o/fuji_smooth.png", qauto(X) )
 \end{verbatim}
 \includegraphics{o/fuji_smooth.png}~\verb+fuji_smooth.png+
 \end{quote}
@@ -223,10 +223,10 @@ library.
 \begin{quote}
 \begin{verbatim}
 # cast shadows over Fuji
-x = piio.read("i/fuji.tif").squeeze()
+x = iio.read("i/fuji.tif").squeeze()
 import demtk
 z = demtk.render_shadows(x, (1,1,25))
-piio.write("o/fuji_shadows.png", qauto(z) )
+iio.write("o/fuji_shadows.png", qauto(z) )
 \end{verbatim}
 \includegraphics{o/fuji_shadows.png}~\verb+fuji_shadows.png+
 \end{quote}
@@ -258,7 +258,7 @@ dark valleys.
 \begin{quote}
  \begin{verbatim}
 # coarse approximation of ambient occlusion
-x = piio.read("i/fuji.tif").squeeze()
+x = iio.read("i/fuji.tif").squeeze()
 z = 0*x
 z += demtk.render_shadows(x, ( 1, 0, 25) )
 z += demtk.render_shadows(x, ( 1, 1, 25) )
@@ -268,7 +268,7 @@ z += demtk.render_shadows(x, (-1, 0, 25) )
 z += demtk.render_shadows(x, (-1,-1, 25) )
 z += demtk.render_shadows(x, ( 0,-1, 25) )
 z += demtk.render_shadows(x, ( 1,-1, 25) )
-piio.write("o/fuji_aaaprox.png", qauto(z/8) )
+iio.write("o/fuji_aaaprox.png", qauto(z/8) )
 \end{verbatim}
 \includegraphics{o/fuji_aaaprox.png}~\verb+fuji_aaaprox.png+
 \end{quote}
@@ -278,7 +278,7 @@ thin streets and bright rooftops.
 \begin{quote}
  \begin{verbatim}
 # coarse approximation of ambient occlusion
-x = piio.read("i/terrassa.tif").squeeze()
+x = iio.read("i/terrassa.tif").squeeze()
 z = 0*x
 z += demtk.render_shadows(x, ( 1, 0, 2) )
 z += demtk.render_shadows(x, ( 1, 1, 2) )
@@ -288,7 +288,7 @@ z += demtk.render_shadows(x, (-1, 0, 2) )
 z += demtk.render_shadows(x, (-1,-1, 2) )
 z += demtk.render_shadows(x, ( 0,-1, 2) )
 z += demtk.render_shadows(x, ( 1,-1, 2) )
-piio.write("o/terrassa_aaaprox.png", qauto(z/8) )
+iio.write("o/terrassa_aaaprox.png", qauto(z/8) )
 \end{verbatim}
 \includegraphics{o/terrassa_aaaprox.png}~\verb+terrassa_aaaprox.png+
 \end{quote}
@@ -307,9 +307,9 @@ filter:
 \begin{quote}
 \begin{verbatim}
 # linear approximation of ambient occlusion
-x = piio.read("i/terrassa.tif").squeeze()
+x = iio.read("i/terrassa.tif").squeeze()
 z = filter_riesz(x, 1)
-piio.write("o/terrassa_aalin.png", qauto(z.clip(-1000,0)) )
+iio.write("o/terrassa_aalin.png", qauto(z.clip(-1000,0)) )
 \end{verbatim}
 \includegraphics{o/terrassa_aalin.png}~\verb+terrassa_aalin.png+
 \end{quote}
@@ -329,7 +329,7 @@ earthy tones.
 \begin{quote}
 \begin{verbatim}
 # read palette from file
-img_terrain = piio.read("i/DEM_poster.png")
+img_terrain = iio.read("i/DEM_poster.png")
 pal_terrain = img_terrain[0][0:256]
 \end{verbatim}
 \includegraphics{i/DEM_poster.png}~\verb+DEM_poster.png+
@@ -338,9 +338,9 @@ pal_terrain = img_terrain[0][0:256]
 \begin{quote}
 \begin{verbatim}
 # apply palette to DEM
-x = piio.read("i/fuji.tif").squeeze()
+x = iio.read("i/fuji.tif").squeeze()
 X = pal_terrain[qauto(x)]
-piio.write("o/fuji_palette.png", X )
+iio.write("o/fuji_palette.png", X )
 \end{verbatim}
 \includegraphics{o/fuji_palette.png}~\verb+fuji_palette.png+
 \end{quote}
@@ -361,9 +361,9 @@ the tops of the skyscrapers are covered in snow!
 \begin{quote}
 \begin{verbatim}
 # render a urban DEM using a "terrain" palette
-x = piio.read("i/terrassa.tif").squeeze()
+x = iio.read("i/terrassa.tif").squeeze()
 X = pal_terrain[qauto(x)]
-piio.write("o/terrassa_pal.png", X )
+iio.write("o/terrassa_pal.png", X )
 \end{verbatim}
 \includegraphics{o/terrassa_pal.png}~\verb+terrassa_pal.png+
 \end{quote}
@@ -378,12 +378,12 @@ by taking their average:
 
 \begin{quote}
 \begin{verbatim}
-x = piio.read("i/fuji.tif").squeeze()
+x = iio.read("i/fuji.tif").squeeze()
 from numpy import newaxis
 x_lam = qauto(render_shading(x))[:,:,newaxis]  # lambertian shading of x
 x_pal = pal_terrain[qauto(x)]     # color palette of x
 X = qauto(x_lam**.8 * x_pal)          # combination (geometric mean)
-piio.write("o/fuji_combined.png", X)
+iio.write("o/fuji_combined.png", X)
 \end{verbatim}
 \includegraphics{o/fuji_combined.png}~\verb+fuji_combined.png+
 \end{quote}
@@ -406,16 +406,16 @@ and ridges (red) of a topographic map.
 \begin{quote}
 \begin{verbatim}
 from numpy import fmax, dstack
-x = piio.read("i/fuji.tif").squeeze()
+x = iio.read("i/fuji.tif").squeeze()
 r = filter_riesz(x, 1)
 x_signed  = qauto(r)
 x_ridges  = 2.0*qauto(fmax(0,r)).clip(0,255)
 x_valleys = 255-2.0*qauto(fmax(0,-r)).clip(0,255)
 x_curv    = dstack([x_valleys, x_valleys-x_ridges, 255.0-x_ridges])
-piio.write("o/fuji_signed.png" , x_signed )
-piio.write("o/fuji_ridges.png" , x_ridges )
-piio.write("o/fuji_valleys.png", x_valleys )
-piio.write("o/fuji_curv.png", x_curv )
+iio.write("o/fuji_signed.png" , x_signed )
+iio.write("o/fuji_ridges.png" , x_ridges )
+iio.write("o/fuji_valleys.png", x_valleys )
+iio.write("o/fuji_curv.png", x_curv )
 \end{verbatim}
 \includegraphics{o/fuji_signed.png}~\verb+fuji_signed.png+
 \includegraphics{o/fuji_ridges.png}~\verb+fuji_ridges.png+
@@ -434,10 +434,10 @@ streets (in blue) and flat or otherwise ambiguous parts (in white).
 %
 %# render urban scene with sign of a Riesz filter
 %from numpy import uint8
-%x = piio.read("i/terrassa.tif").squeeze()
+%x = iio.read("i/terrassa.tif").squeeze()
 %t = filter_riesz(x, 1)
 %T = (127.5 + 60 * t / t.std()).clip(0.255).astype(uint8)
-%piio.write("o/terrassa_curv.png", pal_blue_yellow[T] )
+%iio.write("o/terrassa_curv.png", pal_blue_yellow[T] )
 %\end{verbatim}
 %\includegraphics{o/terrassa_curv.png}~\verb+terrassa_curv.png+
 %\end{quote}
@@ -451,12 +451,12 @@ high-contrast rendering suitable for display in low-resolution projectors.
 
 \begin{quote}
 \begin{verbatim}
-import demtk, piio
-x = piio.read("i/terrassa.tif").squeeze()
-piio.write("o/terrassa_full.png", demtk.render(x))
+import demtk, iio
+x = iio.read("i/terrassa.tif").squeeze()
+iio.write("o/terrassa_full.png", demtk.render(x))
 
-x = piio.read("i/fuji.tif").squeeze()
-piio.write("o/fuji_full.png", demtk.render(x))
+x = iio.read("i/fuji.tif").squeeze()
+iio.write("o/fuji_full.png", demtk.render(x))
 \end{verbatim}
 \includegraphics{o/terrassa_full.png}~\verb+terrassa_full.png+
 \includegraphics{o/fuji_full.png}~\verb+fuji_full.png+
@@ -468,12 +468,12 @@ piio.write("o/fuji_full.png", demtk.render(x))
 
 \begin{quote}
 \begin{verbatim}
-import demtk, piio
-x = piio.read("i/terrassa.tif").squeeze()
-piio.write("o/terrassa_erosion.png",  demtk.render(demtk.cross_erosion(x)))
-piio.write("o/terrassa_dilation.png", demtk.render(demtk.cross_dilation(x)))
-piio.write("o/terrassa_median.png", demtk.render(demtk.cross_median(x)))
-piio.write("o/terrassa_median5.png", demtk.render(demtk.cross_median(x,5)))
+import demtk, iio
+x = iio.read("i/terrassa.tif").squeeze()
+iio.write("o/terrassa_erosion.png",  demtk.render(demtk.cross_erosion(x)))
+iio.write("o/terrassa_dilation.png", demtk.render(demtk.cross_dilation(x)))
+iio.write("o/terrassa_median.png", demtk.render(demtk.cross_median(x)))
+iio.write("o/terrassa_median5.png", demtk.render(demtk.cross_median(x,5)))
 \end{verbatim}
 \includegraphics{o/terrassa_erosion.png}~\verb+terrassa_erosion.png+
 \includegraphics{o/terrassa_dilation.png}~\verb+terrassa_dilation.png+
@@ -482,10 +482,10 @@ piio.write("o/terrassa_median5.png", demtk.render(demtk.cross_median(x,5)))
 
 %\begin{quote}
 %\begin{verbatim}
-%import demtk, piio
-%x = piio.read("i/fuji.tif").squeeze()
-%piio.write("o/fuji_erosion.png",  demtk.render(demtk.cross_erosion(x)))
-%piio.write("o/fuji_dilation.png", demtk.render(demtk.cross_dilation(x)))
+%import demtk, iio
+%x = iio.read("i/fuji.tif").squeeze()
+%iio.write("o/fuji_erosion.png",  demtk.render(demtk.cross_erosion(x)))
+%iio.write("o/fuji_dilation.png", demtk.render(demtk.cross_dilation(x)))
 %\end{verbatim}
 %\includegraphics{o/fuji_erosion.png}~\verb+fuji_erosion.png+
 %\includegraphics{o/fuji_dilation.png}~\verb+fuji_dilation.png+
