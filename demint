@@ -9,8 +9,6 @@ filename_out = sys.argv[2]
 import iio
 x = iio.read(filename_in)[:,:,0]
 
-print(x.shape)
-
 # fill-in nans by poisson equation with mixed boundary conditions
 import demtk
 #y = demtk.fill_nans_by_laplace_equation(x)
