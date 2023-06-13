@@ -331,5 +331,6 @@ def render_palette_dem(x):
 	pal_terrain = img_terrain[0][0:256]
 	return pal_terrain[qauto(x,p=0.1)]
 
+version = 1
 
 # vim:set tw=80 filetype=python ts=8 sw=8 sts=0 noexpandtab:
