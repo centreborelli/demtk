@@ -1,0 +1,20 @@
+#! /usr/bin/env python3
+
+# extract input arguments
+import sys
+filename_in  = sys.argv[1]
+filename_out = sys.argv[2]
+
+# read input image
+import iio
+x = iio.read(filename_in)[:,:,0]
+
+print(x.shape)
+
+# fill-in nans by poisson equation with mixed boundary conditions
+import demtk
+#y = demtk.fill_nans_by_laplace_equation(x)
+y = demtk.descending_neumann_interpolation(x)
+
+# save output
+iio.write(filename_out, y)
