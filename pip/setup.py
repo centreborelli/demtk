@@ -3,10 +3,10 @@ import setuptools
 
 setuptools.setup(
 	name = "demtk",
-	version = "1",
+	version = "1.1",
 	author = "Enric Meinhardt-Llopis",
 	author_email = "enric.meinhardt@ens-paris-saclay.fr",
-	description = "The Definitive Interface for Image Processing Practitioners",
+	description = "Digital Elevation Maps Toolkit",
 	url = "https://github.com/centreborelli/demtk",
 	classifiers = [
 		"Operating System :: OS Independent",
