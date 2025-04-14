@@ -168,11 +168,10 @@ def filter_riesz0(x, s):   # Riesz scale-space (periodic boundary conditions)
         h, w = x.shape
         p = repeat(w*fftfreq(w).reshape(1,w), h, axis=0)  # x-frequencies
         q = repeat(h*fftfreq(h).reshape(h,1), w, axis=1)  # y-frequencies
-        r = hypot(p, q)       # image of spectral radius
-        r[0,0] = 1            # avoid warnings when 1/0
-        X = fft2(x) * r**s    # apply the filter in the frequency domain
-        if (s <= 0):
-                X[0,0] = 0        # for negative s, set the mean to zero
+        r = hypot(p, q)         # image of spectral radius
+        r[0,0] = 1              # avoid warnings when 1/0
+        X = fft2(x) / r**(s/2)  # apply the filter in the frequency domain
+        X[0,0] = 0              # for all s, set the mean to zero
         return ifft2(X).real
 \end{verbatim}
 \end{quote}
@@ -308,8 +307,9 @@ filter:
 \begin{verbatim}
 # linear approximation of ambient occlusion
 x = iio.read("i/terrassa.tif").squeeze()
-z = filter_riesz(x, 1)
-iio.write("o/terrassa_aalin.png", qauto(z.clip(-1000,0)) )
+z = filter_riesz(x, -1)
+iio.write("o/terrassa_aalin.npy", z)
+iio.write("o/terrassa_aalin.png", qauto(z.clip(-200,0)) )
 \end{verbatim}
 \includegraphics{o/terrassa_aalin.png}~\verb+terrassa_aalin.png+
 \end{quote}
