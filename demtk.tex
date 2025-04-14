@@ -52,7 +52,7 @@ For that we will use the function \verb+qauto+, defined below
 \begin{quote}
 \begin{verbatim}
 def qauto(x):   # quantize a floating-point image into 8 bits
-        from numpy import float, uint8
+        from numpy import uint8
         m = x.min()
         M = x.max()
         X  = (255 * (x.astype(float) - m) / (M - m) ).astype(uint8)
@@ -256,7 +256,7 @@ Notice that the average image of a small number of shadow images already
 gives an idea of the overall geometry: you can see the bright ridges, the
 dark valleys.
 \begin{quote}
- \begin{verbatim}
+\begin{verbatim}
 # coarse approximation of ambient occlusion
 x = iio.read("i/fuji.tif").squeeze()
 z = 0*x
@@ -276,7 +276,7 @@ iio.write("o/fuji_aaaprox.png", qauto(z/8) )
 For urban regions, the average shadow image gives a clarifying view of dark
 thin streets and bright rooftops.
 \begin{quote}
- \begin{verbatim}
+\begin{verbatim}
 # coarse approximation of ambient occlusion
 x = iio.read("i/terrassa.tif").squeeze()
 z = 0*x
@@ -480,16 +480,16 @@ iio.write("o/terrassa_median5.png", demtk.render(demtk.cross_median(x,5)))
 \includegraphics{o/terrassa_median5.png}~\verb+terrassa_median5.png+
 \end{quote}
 
-%\begin{quote}
-%\begin{verbatim}
-%import demtk, iio
-%x = iio.read("i/fuji.tif").squeeze()
-%iio.write("o/fuji_erosion.png",  demtk.render(demtk.cross_erosion(x)))
-%iio.write("o/fuji_dilation.png", demtk.render(demtk.cross_dilation(x)))
-%\end{verbatim}
-%\includegraphics{o/fuji_erosion.png}~\verb+fuji_erosion.png+
-%\includegraphics{o/fuji_dilation.png}~\verb+fuji_dilation.png+
-%\end{quote}
+\begin{quote}
+\begin{verbatim}
+import demtk, iio
+x = iio.read("i/fuji.tif").squeeze()
+iio.write("o/fuji_erosion.png",  demtk.render(demtk.cross_erosion(x)))
+iio.write("o/fuji_dilation.png", demtk.render(demtk.cross_dilation(x)))
+\end{verbatim}
+\includegraphics{o/fuji_erosion.png}~\verb+fuji_erosion.png+
+\includegraphics{o/fuji_dilation.png}~\verb+fuji_dilation.png+
+\end{quote}
 
 morphological operations
 

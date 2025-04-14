@@ -26,7 +26,7 @@ def grid_structuring(h, w):
 
 def graph_dilation(E, x):
 	from scipy.sparse import diags
-	y = (diags(x.flatten())@E).max(axis=0).A.squeeze()
+	y = (diags(x.flatten())@E).max(axis=0).toarray().squeeze()
 	return y
 
 def graph_median(E, x):
@@ -313,7 +313,7 @@ def render_lssao(d, p=1):
 
 # quantize a floating-point image into 8 bits
 def qauto(x, p=0):
-	from numpy import float, uint8
+	from numpy import uint8
 	if p > 0:
 		from numpy import percentile
 		m = percentile(x, p)
@@ -331,6 +331,6 @@ def render_palette_dem(x):
 	pal_terrain = img_terrain[0][0:256]
 	return pal_terrain[qauto(x,p=0.1)]
 
-version = 1
+version = 2
 
 # vim:set tw=80 filetype=python ts=8 sw=8 sts=0 noexpandtab:

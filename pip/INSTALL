@@ -3,6 +3,6 @@ commands:
 
         # update version number on file setup.py
         # update version number on file demtk.py
-	python setup.py sdist bdist_wheel
+	python -m build
 	python -m twine upload dist/demtk-X.tar.gz
 	rm -rf build dist demtk.egg-info

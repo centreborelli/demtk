@@ -1,0 +1,8 @@
+CODING (TODO)
+------
+
+- finish writing stub functions
+- deal with NaNs consistently
+- more palettes (especially including correct NaN conventions)
+- add gtti presentation
+- radar simulation
