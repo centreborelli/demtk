@@ -190,7 +190,7 @@ def shift(d):
 	return e
 
 # API: x = demtk.render(d)
-def render(d):
+def render(d, p=1, s=-1):
 	"""
 	Render a DEM using simple hillshading and color palette
 
@@ -199,19 +199,19 @@ def render(d):
 	"""
 	from numpy import newaxis, sqrt
 	d_pal = render_palette_dem(d).astype(float)
-	d_lam = qauto(render_shading(d)[:,:,newaxis], 5).astype(float)
-	d_sao = qauto(render_lssao(d,p=1)[:,:,newaxis], 5).astype(float)
+	d_lam = qauto(render_shading(d)[:,:,newaxis], p).astype(float)
+	d_sao = qauto(render_lao(d, s)[:,:,newaxis], p).astype(float)
 
-	return qauto(sqrt(d_lam*d_sao)*d_pal, 2)
+	return qauto(sqrt(d_lam*d_sao)*d_pal, p)
 
 	# does not work due to brain-damaged broadcasting rules
 	#d_pal = render_palette_dem(d)
 	#d_lam = qauto(render_shading(d), 5)
-	#d_sao = qauto(render_lssao(d), 5)
+	#d_sao = qauto(render_lao(d), 5)
 	#return qauto(sqrt(d_lam*d_sao)*d_pal, 2)
 
 # API: x = demtk.render(d)
-def renderclean(d):
+def renderclean(d, p=1):
 	"""
 	Render a DEM using simple hillshading and color palette
 
@@ -220,10 +220,10 @@ def renderclean(d):
 	"""
 	from numpy import newaxis, sqrt
 	d_pal = render_palette_dem(d).astype(float)
-	d_lam = qauto(render_shading(d)[:,:,newaxis], 5).astype(float)
-	#d_sao = qauto(render_lssao(d,p=1)[:,:,newaxis], 5).astype(float)
+	d_lam = qauto(render_shading(d)[:,:,newaxis], p).astype(float)
+	#d_sao = qauto(render_lao(d,p=1)[:,:,newaxis], 5).astype(float)
 
-	return qauto(sqrt(d_lam)*d_pal, 2)
+	return qauto(sqrt(d_lam)*d_pal, p)
 
 # project a 3D point cloud into a DEM
 def project(xyz, xmin, xmax, ymin, ymax, r):
@@ -293,9 +293,8 @@ def filter_riesz0(x, s):
 	q = repeat(h*fftfreq(h).reshape(h,1), w, axis=1)  # y-frequencies
 	r = hypot(p, q)           # image of spectral radius
 	r[0,0] = 1                # avoid warnings when 1/0
-	X = fft2(x) * r**s        # apply the filter in the frequency domain
-	if (s <= 0):
-		X[0,0] = 0        # for negative s, set the mean to zero
+	X = fft2(x) / r**s        # apply the filter in the frequency domain
+	X[0,0] = 0        # for negative s, set the mean to zero
 	return ifft2(X).real
 
 # Riesz scale-space (symmetric boundary conditions)
@@ -306,9 +305,10 @@ def filter_riesz(x, s):
 	z = filter_riesz0(y, s)
 	return z[0:h,0:w]
 
-# linear screen space ambient occlusion
-def render_lssao(d, p=1):
-	z = filter_riesz(d, p)
+# linear (screen space) ambient occlusion
+def render_lao(d, s=-1):
+	from numpy import fmin
+	z = fmin(0, filter_riesz(d, s))
 	return z
 
 # quantize a floating-point image into 8 bits
