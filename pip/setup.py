@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
 	name = "demtk",
-	version = "2",
+	version = "3",
 	author = "Enric Meinhardt-Llopis",
 	author_email = "enric.meinhardt@ens-paris-saclay.fr",
 	description = "Digital Elevation Maps Toolkit",
