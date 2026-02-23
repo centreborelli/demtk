@@ -100,11 +100,12 @@ def cross_median(d,p=3):
 
 
 def fill_nans_by_laplace_equation(xx):
-	from numpy import isnan, nan_to_num
+	from numpy import isnan, isinf, nan_to_num
 	from scipy.sparse import eye, diags
 	from scipy.sparse.linalg import spsolve
 	s = xx.shape                    # shape of the image domain
 	x = xx.flatten()                # flattened data
+	x[isinf(x)] = float("nan")      # normalize inf to nan
 	L = grid_laplacian(s[0], s[1])  # laplacian matrix
 	M = diags(0.0 + isnan(x))       # complementary mask operator
 	I = eye(s[0] * s[1])            # identity matrix
@@ -114,12 +115,13 @@ def fill_nans_by_laplace_equation(xx):
 	return u.reshape(s[0], s[1])    # reshape and return
 
 def descending_neumann_interpolation(xx):
-	from numpy import isnan, nan_to_num
+	from numpy import isnan, isinf, nan_to_num
 	from scipy.sparse import eye, diags
 	from scipy.sparse.linalg import spsolve
 	s = xx.shape                    # shape of the image domain
 	x = xx.flatten()                # flattened data
 	m = 0.0 + isnan(x)              # mask indicator function
+	x[isinf(x)] = float("nan")      # normalize inf to nan
 	x = nan_to_num(x)               # sanitize data (fix numpy regression)
 	M = diags(m)                    # mask operator
 	I = eye(s[0] * s[1])            # identity matrix
@@ -332,6 +334,6 @@ def render_palette_dem(x):
 	pal_terrain = img_terrain[0][0:256]
 	return pal_terrain[qauto(x,p=0.1)]
 
-version = 3
+version = 4
 
 # vim:set tw=80 filetype=python ts=8 sw=8 sts=0 noexpandtab:
